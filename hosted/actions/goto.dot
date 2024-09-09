@@ -1,0 +1,25 @@
+digraph workflow {
+    entry[
+        se_type0 = OnDemandTrigger        
+    ];
+
+    # Triggers after all of the actions of the node have completed. 
+    # If multiple GoTo statements are called in the same node, only the last 
+    # one will execute
+    action[
+        se_type0 = GoTo 
+        # Pick one or the other
+        se_node0 = "comeHere" // Static GoTo
+        # Dynamic GoTo 
+        se_determineNode0 = "(ctx, logger) => {
+            return \"comeHere\";
+        }"
+    ]
+
+    comeHere[]
+    exit[];
+
+    entry->action;
+    action->exit;
+    comeHere -> exit;
+}

@@ -1,0 +1,28 @@
+digraph workflow {
+  entry[
+    se_type0 = TimerTrigger,
+    # CRON FORMAT
+    # * * * * *
+    # minute hour day(month) month day(week)    
+    se_cronExpression0 = "*/5 * * * *",  // Every 5 minutes.
+    # se_cronExpression0 = "0,15,30,45 * * * *" On every 0th, 15th, 30th, 45th minute.
+    # se_cronExpression0 = "0 * * * *" Every 0th minute.
+    # se_cronExpression0 = "* 3-5 * * *"Every hour from 3rd to 5th.
+    se_maxRetries0 = 0,
+    se_timeZone0 = "Mountain Standard Time"
+    # to find all time zones use powershell:
+    # Get-ChildItem -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Time Zones"
+  ];
+  
+  log[
+    se_type0 = Action,
+    se_action0 = "(ctx, log) => {
+       log.LogInformation($\"Cron Triggered.\");
+    }",
+  ]
+    
+  exit[];
+
+  entry->log;
+  log->exit;
+}

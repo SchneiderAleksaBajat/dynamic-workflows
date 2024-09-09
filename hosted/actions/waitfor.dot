@@ -1,0 +1,31 @@
+digraph workflow {
+    entry[
+        se_type0 = OnDemandTrigger        
+    ];
+
+    # WaitFor unloads the workflow from memory and saves signal information about when it should load again and resume.
+    action[
+        label = "<first> Wait for first message|<second> Wait for second message",
+        se_executionOrder = Parallel,
+
+        se_type0 = WaitFor,
+        se_eventType0 = "", // Fully qualified name of the event/message -> Namespace.ClassName
+        se_resultVariable0 = "FirstResult" // Access it later with ctx.State.FirstResult - JToken with contents of the message.
+        se_determineResultVariable0 = "(ctx, log) => {
+
+        }" // If you want to dynamically set the result variable name.
+
+        se_type1 = WaitFor,
+        se_eventType1 = "", // Fully qualified name of the event/message -> Namespace.ClassName
+        se_resultVariable1 = "SecondResult" // Access it later with ctx.State.SecondResult - JToken with contents of the message.
+        se_determineResultVariable1 = "(ctx, log) => {
+
+        }" // If you want to dynamically set the result variable name.
+    ]
+
+    entry->action;
+    action:first -> exit;
+    action:second -> exit;
+
+    exit[];
+}

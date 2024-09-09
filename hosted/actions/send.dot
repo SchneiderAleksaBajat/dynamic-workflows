@@ -1,0 +1,19 @@
+digraph workflow {
+    entry[
+        se_type0 = OnDemandTrigger        
+    ];
+
+    action[
+        se_type0 = Send 
+        se_queueName0 = ""
+        se_workflowSessionId0 = "",
+        se_message0 = "",
+        se_modifyMessage0 = "(message ,ctx, log) => {
+
+        }"
+    ]
+
+    exit[];
+
+    entry->action->exit;
+}

@@ -1,0 +1,21 @@
+digraph workflow {
+    entry[
+        se_type0 = OnDemandTrigger        
+    ];
+
+    action[
+        se_type0 = Publish 
+        se_topicName0 = "" // Publish to specific topic.
+        se_workflowSessionId0 = "" // Order of the message.
+        se_message0 = "{}" // Static JSON message.
+        se_messageType0 = "" // Fully qualified message type.
+        se_modifyMessage0 = "(message, ctx, log) => { 
+
+        }" // Message is of type Azure.Message.ServiceBus.ServiceBusMessage
+    ]
+
+    exit[];
+
+    entry->action->exit;
+
+}

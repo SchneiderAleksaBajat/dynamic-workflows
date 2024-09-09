@@ -1,0 +1,25 @@
+digraph workflow {
+    entry[
+        se_type = OnDemandTrigger
+    ];
+    actions[
+        se_executionOrder = Parallel,
+        se_type0 = Action,
+        se_action0 = "(ctx, log) => {
+        }"
+        se_executionAwaitGroup0 = 0,
+
+        se_type1 = Action,
+        se_action1 = "(ctx, log) => {
+        }"
+        se_executionAwaitGroup1 = 1  
+
+        se_type2 = Action,
+        se_action2 = "(ctx, log) => {
+        }"
+        se_executionAwaitGroup2 = 1 
+    ];
+
+    exit[];
+    entry-> actions->exit
+}

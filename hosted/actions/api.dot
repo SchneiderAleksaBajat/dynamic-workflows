@@ -1,0 +1,32 @@
+
+digraph workflow {
+    entry[
+        se_type0 = OnDemandTrigger        
+    ];
+
+    action[
+        se_type0 = Api 
+        se_body0 = "{}" # application/json
+        se_method0 = "" # GET, POST, PUT, DELETE, PATCH
+        se_service0 = "" # Find inputs in DXI Monitoring -> Hosted Services
+
+
+        # You may decide to modify the HttpRequestMessage
+        se_modifyRequest0 = "(request, ctx, log) => {
+        }"
+        # or
+        # You may just enter the static url
+        se_url0 = "/api/v1/...",
+
+        
+        # You may decide to modify the HttpResponse
+        se_processResponse0 = "async (response, ctx, log) => {}"
+        # or
+        # You may directly assign the response to the state variable 
+        se_resultVariable0 = "ResultName" # Access it later with ctx.State.ResultName
+    ]
+
+    exit[];
+
+    entry->action->exit;
+}

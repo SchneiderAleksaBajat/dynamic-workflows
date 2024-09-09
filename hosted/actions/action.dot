@@ -1,0 +1,15 @@
+digraph workflow {
+    entry[
+        se_type0 = OnDemandTrigger        
+    ];
+
+    action[
+        se_type0 = Action
+        se_action0 = "(ctx, logger) => {
+            logger.LogInformation(\"Action executed\");
+        }"
+    ]
+
+    exit[];
+    entry->action->exit;
+}

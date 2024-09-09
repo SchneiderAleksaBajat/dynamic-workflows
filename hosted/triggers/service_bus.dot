@@ -1,0 +1,22 @@
+digraph workflow {
+    entry[
+        se_type0 = ServiceBusTrigger,
+        se_serviceBusTrigger0 = "", // Fully qualified name of the event/message -> Namespace.ClassName
+        se_queueName0 = "", // optional - if specified will look at that specific queue.
+        se_topicName0 = "", // optional - if specified will look at that specific topic.
+        # Otherwise it will look at JobServices topic.
+        se_triggerCondition0 = "(ctx, log) => {
+            return ctx.Event.Field == true;
+        }"
+        # Using ctx.Event you access the fields of the event/message.
+    ];
+    log[
+        se_type0 = Action,
+        se_action0 = "(ctx, log) => {
+            return log.LogInformation(\"Service Bus Triggered\");
+        }"
+    ];
+    exit[];
+
+    entry->log->exit;
+}

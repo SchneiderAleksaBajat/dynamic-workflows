@@ -1,0 +1,21 @@
+digraph workflow {
+    entry[
+        se_type = OnDemandTrigger
+    ];
+    actions[
+        se_executionOrder = ForEach,
+        //Reference an object inside of state, imagine accessing the workflow state without "State.". 
+        se_foreachEnumerable = "Field.EnumerableValue", // State.Field.EnumerableValue
+        se_type0 = Action,
+        se_action0 = "(ctx, log) => {
+            var fieldFromEnumerable = ctx.State.__currentForEachItem.Field; 
+        }"
+        se_type1 = Action,
+        se_action1 = "(ctx, log) => {
+            var fieldFromEnumerable = ctx.State.__currentForEachItem.Field; 
+        }"
+    ];
+    exit[];
+
+    entry-> actions->exit
+}

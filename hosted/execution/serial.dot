@@ -1,0 +1,22 @@
+digraph workflow {
+    entry[
+        se_type = OnDemandTrigger
+    ]
+
+    actions[
+        se_executionOrder = Serial
+        se_type0 = Action 
+        se_action0 = "(ctx, log) => {
+        }"
+        se_type1 = Action 
+        se_action1 = "(ctx, log) => {
+        }"
+        se_type2 = Action 
+        se_action2 = "(ctx, log) => {
+        }"
+    ]
+
+    exit[];
+
+    entry->actions->exit
+}

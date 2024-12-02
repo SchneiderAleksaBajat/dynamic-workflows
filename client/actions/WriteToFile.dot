@@ -1,0 +1,16 @@
+digraph workflow {
+    entry[ 
+        # abbreviated for clarity 
+    ]
+    example[
+      se_type3 = WriteToFile,
+      se_determineData3 = "(ctx, msLogger) => {
+      var ctxJSON = JsonConvert.SerializeObject(ctx);
+      return ctxJSON;
+      }",
+      se_determineFilePath3 = "(ctx, msLogger) => {
+      return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), \"output.json\");
+      }",
+    ]
+    entry->example->exit;
+}

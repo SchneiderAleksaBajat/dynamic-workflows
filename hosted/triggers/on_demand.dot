@@ -4,7 +4,7 @@ digraph workflow{
         se_type0 = OnDemandTrigger,
         # se_onDemandScopes = "" - Required scopes user must have to call this workflow.
         se_triggerCondition0 = "(ctx, log) => {
-            ctx.State.SomeState == \"execute\";
+            return ctx.State.SomeState == \"execute\";
         }"
         /* 
         To trigger it send POST to ExternalEvents service

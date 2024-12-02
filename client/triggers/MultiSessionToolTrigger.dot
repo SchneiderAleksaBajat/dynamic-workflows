@@ -1,0 +1,16 @@
+digraph workflow {
+    entry[
+        se_type0 = MultiSessionToolTrigger,
+        se_displayName0 = "Example Button" # Optional
+        se_iconService0 = "" # Optional
+        se_iconUrl0 = "" # Optional
+        se_iconXaml0 = "" # Optional
+        se_showButtonText0 = true, # Does it show display name next to the button or not?
+        se_sortOrder0 = 0,
+        se_visibilityCondition0 = "(dynamicStateMachineContext, msLogger) => {
+            return true;
+        }", # Button visibility condition
+    ]
+
+    entry->exit;
+}

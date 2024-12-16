@@ -1,0 +1,67 @@
+digraph workflow {
+  # This workflow is an example of how to manage API calls that have to be resistent to faults.
+
+  entry[
+    se_type0 = OnDemandTrigger,
+    
+    se_triggerCondition0 = "(ctx, log) => {
+        return true;
+    }"
+  ]
+  
+  doOrFlag[
+    se_type0 = Action
+    se_action0 = "(ctx, log) => {          
+      if (!((IDictionary<string, object>)ctx.State).ContainsKey(\"retryContext\")){
+        ctx.State.retryContext = new ExpandoObject();
+        ctx.State.retryContext.retryNum = 1;            
+        ctx.State.retryContext.allowedNumOfRetries = 3;             
+      }else{        
+        ctx.State.retryContext.retryNum += 1;
+        Thread.Sleep(1000 * (int)ctx.State.retryContext.retryNum);
+      }            
+  
+      if(ctx.State.retryContext.retryNum > ctx.State.retryContext.allowedNumOfRetries){
+        log.LogError($\"Maximum number of retries ({ctx.State.retryContext.allowedNumOfRetries}) exceeded while executing {ctx.CurrentNode} node.\");
+        throw new Exception($\"Maximum number of retries ({ctx.State.retryContext.allowedNumOfRetries}) exceeded while executing {ctx.CurrentNode} node.\");
+      }                
+    }"
+  
+    se_type1 = Api     
+    se_method1 = "GET"
+    se_service1 = "SessionManager"    
+    se_modifyRequest1 = "(request, ctx, log) => {          
+      if(ctx.State.retryContext.retryNum == ctx.State.retryContext.allowedNumOfRetries){
+        ctx.State.sessionId = $\"{ctx.State.fallbackSessionId}\";     
+      }
+        
+      request.RequestUri = new Uri($\"api/v1/Sessions/{ctx.State.sessionId}\", UriKind.RelativeOrAbsolute);              
+    }"    
+        
+    se_processResponse1 = "async (response, ctx, log) => {    
+      if(response.IsSuccessStatusCode){
+        var stringResponse = await response.Content.ReadAsStringAsync();
+        ctx.State.Result = JsonConvert.DeserializeObject<dynamic>(stringResponse);
+        ctx.State.retryContext.executionStatus = true;
+      }else{
+        ctx.State.retryContext.executionStatus = false;
+      }          
+    }"           
+  ]
+  
+  checkFlag[
+    se_type2 = GoTo,
+    se_determineNode2 = "(ctx, log) => {
+      if(ctx.State.retryContext.executionStatus == false){
+        return \"doOrFlag\";
+      }
+      
+      return \"\";
+    }",
+  ]
+  
+  
+  exit[]
+  
+  entry->doOrFlag->checkFlag->exit;
+}
